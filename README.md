@@ -69,10 +69,17 @@ no separate hero photo was supplied.
   `og:image`, JSON-LD `url`/`image`), `robots.txt`, and `sitemap.xml`. Moving to a
   custom domain means updating all three files — grep for `blacksmith-insurance-site`.
 
-## Deployment protection
+## URLs and deployment protection
 
-The Vercel project currently has **Vercel Authentication on** (`all_except_custom
-domains`), so every `*.vercel.app` URL requires a Vercel login and is served with
-`x-robots-tag: noindex`. Anyone outside the team — including the client — gets an
-SSO wall. Turn it off under Project → Settings → Deployment Protection, or attach a
-custom domain, which that scope already exempts.
+Production (public, indexable):
+**https://blacksmith-insurance-site.vercel.app**
+
+The project has Vercel Authentication enabled at `all_except_custom_domains`. In
+practice that gates the per-deployment URLs — the
+`blacksmith-insurance-site-<hash>-…vercel.app` links shown in build output return
+a 302 to Vercel SSO and carry `x-robots-tag: noindex`. The production alias above
+is unaffected: it serves publicly with no auth and no noindex header.
+
+So: share the production alias, not a build-output link. If you need to hand
+someone a specific preview deployment, either add them to the Vercel team or turn
+off Deployment Protection under Project → Settings.
