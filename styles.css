@@ -134,6 +134,7 @@ address { font-style: normal; }
   text-transform: uppercase;
   font-weight: 600;
   border-radius: var(--radius);
+  white-space: nowrap;
   transition: background-color .18s ease, color .18s ease, border-color .18s ease;
 }
 
@@ -201,7 +202,7 @@ address { font-style: normal; }
   text-transform: uppercase;
   font-weight: 500;
 }
-.nav-links a { color: var(--muted-3); }
+.nav-links a { color: var(--muted-3); white-space: nowrap; }
 .nav-links a:hover { color: var(--ink); }
 
 .header-cta {
@@ -755,6 +756,12 @@ address { font-style: normal; }
   .footer-grid { gap: 36px; }
 }
 
+/* The prototype dropped the nav at 900px, but with the phone number and the
+   Get-a-Quote button also in the bar it runs out of room well before that. */
+@media (max-width: 1080px) {
+  .nav-links { display: none; }
+}
+
 @media (max-width: 1024px) {
   .coverage-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cov-card-dark { grid-column: span 2; }
@@ -763,8 +770,6 @@ address { font-style: normal; }
 
 @media (max-width: 900px) {
   :root { --gutter: 24px; }
-
-  .nav-links { display: none; }
 
   .hero-inner,
   .why-inner,

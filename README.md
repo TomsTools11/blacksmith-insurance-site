@@ -60,6 +60,19 @@ no separate hero photo was supplied.
 ## Editing notes
 
 - Colors, fonts, and spacing are CSS custom properties at the top of `styles.css`.
-- Type scales with `clamp()`; breakpoints are at 1180 / 1024 / 900 / 720 / 560px.
+- Type scales with `clamp()`; breakpoints are at 1180 / 1080 / 1024 / 900 / 720 / 560px.
+  The nav drops at 1080 rather than the prototype's 900 — with the phone number and
+  the Get-a-Quote button in the same bar, it runs out of room before 900.
 - The phone number appears in six places (header, hero card, About, quote, footer,
   and JSON-LD) — grep for `9726240239` before changing it.
+- The production hostname is hard-coded in `index.html` (canonical, `og:url`,
+  `og:image`, JSON-LD `url`/`image`), `robots.txt`, and `sitemap.xml`. Moving to a
+  custom domain means updating all three files — grep for `blacksmith-insurance-site`.
+
+## Deployment protection
+
+The Vercel project currently has **Vercel Authentication on** (`all_except_custom
+domains`), so every `*.vercel.app` URL requires a Vercel login and is served with
+`x-robots-tag: noindex`. Anyone outside the team — including the client — gets an
+SSO wall. Turn it off under Project → Settings → Deployment Protection, or attach a
+custom domain, which that scope already exempts.
