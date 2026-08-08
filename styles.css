@@ -269,14 +269,15 @@ address { font-style: normal; }
    max width, which strands a dot at the end of a line. Spacing does the job. */
 .trust-row .dot { display: none; }
 
-.hero-media { position: relative; height: 520px; }
+/* Square frame: the Texas graphic is 1:1, and its "The Colony" callout runs to
+   the artwork's right edge, so any cover-crop would clip the label. */
+.hero-media { position: relative; aspect-ratio: 1; }
 .hero-frame { position: absolute; inset: 0; border: 1px solid var(--line-dk); }
 .hero-photo { position: absolute; inset: 14px; overflow: hidden; }
 .hero-photo img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: 50% 16%;
+  object-fit: contain;
   display: block;
 }
 .hero-badge {
@@ -765,7 +766,6 @@ address { font-style: normal; }
 @media (max-width: 1024px) {
   .coverage-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cov-card-dark { grid-column: span 2; }
-  .hero-media { height: 460px; }
 }
 
 @media (max-width: 900px) {
@@ -777,7 +777,7 @@ address { font-style: normal; }
   .quote-inner { grid-template-columns: minmax(0, 1fr); }
 
   .hero-inner { padding: 64px var(--gutter) 76px; }
-  .hero-media { height: 420px; max-width: 460px; }
+  .hero-media { max-width: 460px; }
   .hero-badge { left: auto; right: -8px; bottom: 24px; }
 
   .coverage { padding: 76px var(--gutter) 80px; }
@@ -821,7 +821,6 @@ address { font-style: normal; }
   .span-2 { grid-column: auto; }
 
   .about-media img { height: 380px; }
-  .hero-media { height: 380px; }
 }
 
 @media (max-width: 560px) {
@@ -829,7 +828,6 @@ address { font-style: normal; }
   .header-phone { display: none; }
   .brand img { height: 54px; }
 
-  .hero-media { height: 340px; }
   .hero-badge { font-size: 13px; padding: 11px 15px; right: 0; }
 
   .cov-card { padding: 26px 22px 24px; }

@@ -54,8 +54,19 @@ Two things need a decision before this is a finished production site:
 
    The `.why-media` styles are already in `styles.css`.
 
-The owner headshot appears twice — hero and About — at different crops, because
-no separate hero photo was supplied.
+## Hero graphic
+
+The hero uses `assets/texas-hero.webp` — a Texas map marking The Colony, generated
+in Claude Design (`texas-hero-graphic.html`, D3 + us-atlas counties) and rendered at
+1040px for a ~496px display box. Because the artwork is square and its "The Colony"
+callout runs to the right edge, `.hero-media` is `aspect-ratio: 1` and the image uses
+`object-fit: contain` — a non-square frame would clip the label.
+
+The design project also holds a transparent variant of the same artwork. Swapping to
+it makes the map sit directly on the hero background instead of reading as its own
+inset panel; it's a straight file replacement, no CSS change.
+
+The owner headshot is now used only in the About section.
 
 ## Editing notes
 
