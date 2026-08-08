@@ -1,0 +1,23 @@
+# Local agent/session state — never publish (this repo is public)
+.remember/
+.claude/
+.vercel/
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Design handoff bundle + unoptimized source art.
+# Canonical design lives in Claude Design; optimized art is in assets/.
+blacksmith-agency-one-pager/
+company-logo.png
+owner-headshot.png
+
+# Editors
+.idea/
+.vscode/
+*.swp
+
+# Node (not used today, here so a future build step stays clean)
+node_modules/
+npm-debug.log*
