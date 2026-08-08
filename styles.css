@@ -270,7 +270,9 @@ address { font-style: normal; }
 .trust-row .dot { display: none; }
 
 /* Square frame: the Texas graphic is 1:1, and its "The Colony" callout runs to
-   the artwork's right edge, so any cover-crop would clip the label. */
+   the artwork's right edge, so any cover-crop would clip the label. The artwork
+   is transparent, so it sits straight on the hero ink and the 1px frame plus its
+   14px mat are the only container — no second rectangle competing with them. */
 .hero-media { position: relative; aspect-ratio: 1; }
 .hero-frame { position: absolute; inset: 0; border: 1px solid var(--line-dk); }
 .hero-photo { position: absolute; inset: 14px; overflow: hidden; }

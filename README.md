@@ -56,15 +56,22 @@ Two things need a decision before this is a finished production site:
 
 ## Hero graphic
 
-The hero uses `assets/texas-hero.webp` — a Texas map marking The Colony, generated
-in Claude Design (`texas-hero-graphic.html`, D3 + us-atlas counties) and rendered at
-1040px for a ~496px display box. Because the artwork is square and its "The Colony"
-callout runs to the right edge, `.hero-media` is `aspect-ratio: 1` and the image uses
-`object-fit: contain` — a non-square frame would clip the label.
+The hero uses `assets/texas-hero-transparent.webp` — a Texas map marking The Colony,
+generated in Claude Design (`texas-hero-graphic.html`, D3 + us-atlas counties) and
+rendered at 1040px for a ~496px display box.
 
-The design project also holds a transparent variant of the same artwork. Swapping to
-it makes the map sit directly on the hero background instead of reading as its own
-inset panel; it's a straight file replacement, no CSS change.
+Because the artwork is square and its "The Colony" callout runs to the right edge,
+`.hero-media` is `aspect-ratio: 1` and the image uses `object-fit: contain` — a
+non-square frame would clip the label.
+
+The design project exports this artwork two ways. The **transparent** variant is the
+one in use: the map sits directly on the hero ink, so the 1px frame and its 14px mat
+are the only container. The dark-background variant carries its own vignette and dot
+grid, which at ~496px reads as a second rectangle inside the frame rather than as
+texture.
+
+Anything under `/assets/` is served `immutable, max-age=31536000`. Changing an image
+means changing its filename, not overwriting it, or cached clients keep the old one.
 
 The owner headshot is now used only in the About section.
 
