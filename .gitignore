@@ -21,3 +21,4 @@ owner-headshot.png
 # Node (not used today, here so a future build step stays clean)
 node_modules/
 npm-debug.log*
+.vercel

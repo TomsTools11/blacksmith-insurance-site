@@ -1,0 +1,19 @@
+# The Vercel CLI does NOT read .gitignore — anything not listed here gets
+# uploaded by `vercel deploy`. Keep this in sync with .gitignore.
+
+.remember/
+.claude/
+.git/
+.DS_Store
+**/.DS_Store
+
+# Design handoff bundle + unoptimized source art (optimized copies live in assets/)
+blacksmith-agency-one-pager/
+company-logo.png
+owner-headshot.png
+
+.idea/
+.vscode/
+*.swp
+node_modules/
+README.md
