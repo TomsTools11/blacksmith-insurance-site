@@ -1,7 +1,15 @@
 # BlackSmith Agency — website
 
-One-page marketing site for BlackSmith Agency, an independent insurance agency in
+One-page marketing site for BlackSmith Agency, an Allstate insurance agency in
 The Colony, Texas. Static HTML/CSS, no build step, deployed on Vercel.
+
+The agency is captive to Allstate, so the copy must not claim to shop or compare
+carriers. An earlier draft (from the design prototype) was written for an
+independent agency and sold exactly that — "multiple carriers", "we shop the
+market", "we aren't tied to one company". Those claims were rewritten; keep them
+out. Allstate's own brand and advertising rules govern how the name and any logo
+may be used, and this site currently uses the name in text only, with no Allstate
+logo or trademark asset.
 
 Design source: [Blacksmith Insurance Demo Site](https://claude.ai/design/p/5326169f-8b33-41a5-ab46-818ac5599721?file=BlackSmith+Agency.dc.html) (Claude Design).
 
