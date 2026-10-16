@@ -16,20 +16,20 @@
   --gold:       #C79A3F;
   --gold-lt:    #E3C070;
   --gold-dk:    #8A6A22;  /* links on light */
-  --rust:       #C7551C;  /* link hover on light */
+  --rust:       #B04A17;  /* link hover on light: 4.9:1 on bone */
 
   --line:       #DCD7CE;
   --line-2:     #E7E2D9;
   --line-3:     #C9C3B7;
   --line-dk:    #3A4548;
-  --line-dk-2:  #3F4A4D;
+  --line-dk-2:  #727B7E;  /* input borders: 3:1 against panel and field */
   --line-dk-3:  #2A3134;
 
   --muted:      #4C565A;
   --muted-2:    #5A6468;
   --muted-3:    #3C464A;
   --slate:      #8B9598;
-  --steel:      #55605F;
+  --steel:      #727B7E;  /* ghost button border: 3:1 on ink */
 
   --on-dark:    #B6BEC0;
   --on-dark-2:  #AAB3B6;
@@ -42,11 +42,16 @@
   --shell: 1240px;
   --gutter: 32px;
   --radius: 8px;
+
+  /* Sticky header height is derived from these, so anchor jumps can clear it. */
+  --logo-h: 55px;
+  --header-pad: 12px;
+  --header-h: calc(var(--logo-h) + 2 * var(--header-pad) + 1px);
 }
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: var(--header-h); }
 
 body {
   margin: 0;
@@ -103,7 +108,6 @@ address { font-style: normal; }
   font-weight: 600;
   margin-bottom: 18px;
 }
-.eyebrow-dark { color: var(--gold-dk); }
 .eyebrow-gold { color: var(--gold); }
 .eyebrow-rule {
   display: flex;
@@ -184,13 +188,13 @@ address { font-style: normal; }
 .header-inner {
   max-width: var(--shell);
   margin: 0 auto;
-  padding: 12px var(--gutter);
+  padding: var(--header-pad) var(--gutter);
   display: flex;
   align-items: center;
   gap: 32px;
 }
 .brand { display: flex; align-items: center; flex: none; }
-.brand img { height: 83px; width: auto; display: block; }
+.brand img { height: var(--logo-h); width: auto; display: block; }
 
 .nav-links {
   display: flex;
@@ -219,6 +223,8 @@ address { font-style: normal; }
   white-space: nowrap;
 }
 .header-phone:hover { color: var(--rust); }
+/* Short "Call" label replaces the number on narrow phones (see 560px query). */
+.header-phone-short { display: none; }
 
 /* ---------- hero ---------- */
 
@@ -282,19 +288,6 @@ address { font-style: normal; }
   object-fit: contain;
   display: block;
 }
-.hero-badge {
-  position: absolute;
-  left: -18px;
-  bottom: 42px;
-  background: var(--gold);
-  color: var(--ink-3);
-  padding: 14px 20px;
-  font-family: var(--display);
-  font-size: 15px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  border-radius: var(--radius);
-}
 
 /* ---------- section heads ---------- */
 
@@ -338,7 +331,7 @@ address { font-style: normal; }
   font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--slate);
+  color: var(--muted-2);
   font-weight: 600;
   margin-bottom: 10px;
 }
@@ -369,7 +362,7 @@ address { font-style: normal; }
 .acc summary::-webkit-details-marker { display: none; }
 .acc summary::marker { content: ""; }
 .acc .chev {
-  color: var(--gold);
+  color: var(--gold-dk);
   font-size: 18px;
   line-height: 1;
   transition: transform 0.2s;
@@ -406,6 +399,7 @@ address { font-style: normal; }
 .cov-card-dark .acc { border-top-color: var(--line-dk); }
 .cov-card-dark .acc details { border-bottom-color: var(--line-dk); }
 .cov-card-dark .acc details p { color: var(--on-dark-2); }
+.cov-card-dark .acc .chev { color: var(--gold); }
 .cov-card-dark .cov-link { color: var(--bone-2); }
 .cov-card-dark .cov-link:hover { color: var(--gold); }
 
@@ -584,7 +578,7 @@ address { font-style: normal; }
 .process-num {
   font-family: var(--display);
   font-size: 48px;
-  color: var(--gold);
+  color: var(--gold-dk);
   line-height: 1;
   margin-bottom: 20px;
 }
@@ -718,7 +712,7 @@ address { font-style: normal; }
   margin: 20px 0 0;
   font-size: 12px;
   line-height: 1.6;
-  color: #7E8789;
+  color: #9BA4A7;
 }
 
 /* ---------- footer ---------- */
@@ -748,7 +742,7 @@ address { font-style: normal; }
 }
 .footer-phone:hover { color: var(--gold); }
 .footer-addr { margin: 0; font-size: 14px; line-height: 1.6; color: var(--slate); }
-.site-footer h4 {
+.site-footer h2 {
   font-size: 15px;
   letter-spacing: 0.14em;
   color: var(--bone-2);
@@ -757,7 +751,7 @@ address { font-style: normal; }
 .footer-links { display: flex; flex-direction: column; gap: 12px; font-size: 14px; }
 .footer-links a { color: var(--on-dark); }
 .footer-links a:hover { color: var(--gold); }
-.footer-legal { margin: 28px 0 0; font-size: 12px; color: #6E7779; line-height: 1.7; }
+.footer-legal { margin: 28px 0 0; font-size: 12px; color: var(--slate); line-height: 1.7; }
 
 /* ==========================================================================
    Responsive — additive; the prototype only hid .nav-links below 900px.
@@ -791,8 +785,13 @@ address { font-style: normal; }
   .quote-inner { grid-template-columns: minmax(0, 1fr); }
 
   .hero-inner { padding: 64px var(--gutter) 76px; }
+
+  /* "Get a Quote" should land near the form, so it moves above the contact block. */
+  .quote-inner { row-gap: 0; }
+  .quote-intro { display: contents; }
+  .quote-panel { order: 1; }
+  .quote-contact { order: 2; margin-top: 48px; }
   .hero-media { max-width: 460px; }
-  .hero-badge { left: auto; right: -8px; bottom: 24px; }
 
   .coverage { padding: 76px var(--gutter) 80px; }
   .why,
@@ -820,8 +819,11 @@ address { font-style: normal; }
 
   .why-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
 
-  .header-inner { gap: 16px; padding: 10px var(--gutter); }
-  .brand img { height: 60px; }
+  .footer-links { gap: 2px; }
+  .footer-links a { padding: 10px 0; }
+
+  :root { --logo-h: 52px; --header-pad: 10px; }
+  .header-inner { gap: 16px; }
   .header-phone { font-size: 17px; }
   .btn-dark { padding: 10px 16px; font-size: 12px; }
 
@@ -839,10 +841,20 @@ address { font-style: normal; }
 
 @media (max-width: 560px) {
   .header-cta { gap: 10px; }
-  .header-phone { display: none; }
-  .brand img { height: 54px; }
+  /* No room for the full number, but tap-to-call stays one tap away. */
+  .header-phone {
+    font-family: var(--body);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    border: 1px solid var(--ink);
+    border-radius: var(--radius);
+    padding: 10px 16px;
+  }
+  .header-phone-num { display: none; }
+  .header-phone-short { display: inline; }
 
-  .hero-badge { font-size: 13px; padding: 11px 15px; right: 0; }
 
   .cov-card { padding: 26px 22px 24px; }
   .process-cell { padding: 32px 24px 34px; }

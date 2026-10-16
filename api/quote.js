@@ -83,6 +83,11 @@ async function createLead(lead) {
   if (!res.ok) {
     throw new Error(`AgencyZoom lead create failed: HTTP ${res.status} ${await res.text().catch(() => '')}`);
   }
+  // A 200 can still carry { result: false } when AgencyZoom rejects the lead.
+  const body = await res.json().catch(() => ({}));
+  if (body.result === false) {
+    throw new Error(`AgencyZoom lead create returned result=false: ${JSON.stringify(body)}`);
+  }
 }
 
 function clean(value, max) {
@@ -124,7 +129,7 @@ module.exports = async (req, res) => {
   const missing = required.filter((key) => !process.env[key]);
   if (missing.length) {
     console.error(`api/quote: missing environment variables: ${missing.join(', ')}`);
-    return res.status(500).json({ ok: false, error: 'The form is not configured yet.' });
+    return res.status(503).json({ ok: false, code: 'not_configured', error: 'The form is not configured yet.' });
   }
 
   const [firstname, ...rest] = name.split(/\s+/);
