@@ -18,6 +18,8 @@ Design source: [Blacksmith Insurance Demo Site](https://claude.ai/design/p/53261
 ```
 index.html      the whole page
 styles.css      all styles (design tokens in :root)
+api/quote.js    Vercel function: quote form → AgencyZoom lead
+scripts/        agencyzoom-ids.js — one-time id lookup for the env vars
 vercel.json     cache + security headers
 robots.txt      / sitemap.xml
 assets/         optimized art (logos, headshot, favicon, OG image)
@@ -41,17 +43,65 @@ its own: it renders through a client-side runtime that expects React to be
 injected by the design host. This repo is the compiled, self-contained version —
 same visual output, no runtime.
 
+## Quote form → AgencyZoom
+
+The quote form posts to `/api/quote`, a Vercel serverless function
+(`api/quote.js`, zero dependencies) that creates a lead in AgencyZoom via
+their official API (`POST /v1/api/leads/create`; spec at
+`https://app.agencyzoom.com/openapi/agencyzoom.yaml`). Credentials live in
+Vercel environment variables, never in the browser. A honeypot field
+(`website`) silently drops bot submissions; real failures show the office
+phone number instead of a fake success.
+
+Until the env vars below are set, the function returns "The form is not
+configured yet" and the visitor is pointed at the phone number — the site
+never pretends to send.
+
+### Setup (one time)
+
+1. **Credentials.** The API logs in like a user (`/v1/api/auth/login`) and the
+   lead is created with that user's permissions. Use the agency owner's
+   AgencyZoom login — or better, a dedicated "API/Website" user so the
+   password can be rotated without touching the owner's. There is no scoped
+   API token for this; the Zapier key/secret pair in-app is for Zapier only.
+
+2. **Look up ids.** The create-lead call needs a pipeline, stage, lead source,
+   and producer. List yours (read-only):
+
+   ```bash
+   AGENCYZOOM_USERNAME=owner@agency.com AGENCYZOOM_PASSWORD='…' node scripts/agencyzoom-ids.js
+   ```
+
+   Tip: create a "Website" lead source in AgencyZoom first (Settings → Lead
+   Sources) so form leads are traceable in reports.
+
+3. **Set env vars** in Vercel → Project → Settings → Environment Variables
+   (Production, and Preview if previews should create real leads):
+
+   | Variable | Value |
+   | --- | --- |
+   | `AGENCYZOOM_USERNAME` | login email from step 1 |
+   | `AGENCYZOOM_PASSWORD` | its password |
+   | `AGENCYZOOM_PIPELINE_ID` | from step 2 |
+   | `AGENCYZOOM_STAGE_ID` | from step 2 (stage inside that pipeline) |
+   | `AGENCYZOOM_LEAD_SOURCE_ID` | from step 2 |
+   | `AGENCYZOOM_ASSIGN_TO` | employee id of the producer |
+   | `AGENCYZOOM_TAGS` | optional, e.g. `website;quote-form` |
+   | `AGENCYZOOM_COUNTRY` | optional, defaults to `USA` |
+
+4. **Redeploy**, submit the form on the live site, and confirm the lead lands
+   in AgencyZoom with the right pipeline/stage/source/assignee.
+
+What gets sent: name (split into first/last), email, phone, and a note with
+the selected coverage line and the free-text details. AgencyZoom's API is
+rate-limited (120 calls/min as of Aug 2026); the function caches its login
+token across warm invocations to stay well under it.
+
 ## Known gaps
 
-Two things need a decision before this is a finished production site:
+One thing needs a decision before this is a finished production site:
 
-1. **The quote form has no backend.** The markup is complete and wire-up-ready
-   (named fields, `required`, `autocomplete`). Submitting currently shows a
-   notice pointing the visitor at the phone number rather than pretending to
-   send. To connect it: add `action="…" method="post"` to `#quote-form` and
-   delete the interceptor `<script>` at the bottom of `index.html`.
-
-2. **The "Why BlackSmith" section uses a card, not a photo.** The design left an
+1. **The "Why BlackSmith" section uses a card, not a photo.** The design left an
    empty image slot there (captioned "DFW business owner, shop, or truck yard").
    Until a photo exists, that column is a bone-colored contact card. To swap in
    a real photo, replace the `<aside class="why-card">…</aside>` block with:

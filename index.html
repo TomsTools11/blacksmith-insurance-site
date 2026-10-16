@@ -315,8 +315,8 @@
     </div>
 
     <div class="quote-panel">
-      <!-- To go live: add action="…" + method="post" pointing at your form
-           handler, then delete the interceptor script at the bottom of this file. -->
+      <!-- Submissions go to /api/quote (Vercel function), which creates the
+           lead in AgencyZoom. See README → "Quote form → AgencyZoom". -->
       <form id="quote-form" class="quote-form" novalidate>
         <label class="field span-2">
           <span>Full name *</span>
@@ -367,6 +367,12 @@
         <label class="field span-2">
           <span>Anything else? (optional)</span>
           <textarea name="details" rows="4" placeholder="Vehicles, properties, employees, renewal dates…"></textarea>
+        </label>
+        <!-- Honeypot: invisible to people; the server drops any submission
+             that fills it. -->
+        <label class="field-hp" aria-hidden="true">
+          <span>Leave this field empty</span>
+          <input type="text" name="website" tabindex="-1" autocomplete="off">
         </label>
         <button class="btn-submit span-2" type="submit">Request My Quote</button>
         <p id="form-notice" class="form-notice span-2" role="status" hidden></p>
@@ -443,18 +449,52 @@
 </script>
 
 <script>
-// The quote form has no backend yet. Rather than silently no-op (or claim a
-// success that never happened), tell the visitor how to reach the agency.
-// Delete this block once `action`/`method` are set on #quote-form.
+// Submits the quote form to /api/quote, which creates the lead in AgencyZoom.
+// Any failure falls back to the phone number rather than a dead end.
 (function () {
   var form = document.getElementById('quote-form');
   var notice = document.getElementById('form-notice');
   if (!form || !notice) return;
+  var button = form.querySelector('.btn-submit');
+  var FALLBACK = 'Something went wrong sending your request. Please call (972) 624-0239 and we’ll take care of you.';
+  var NOT_CONFIGURED = 'Online quote requests are coming soon. For now, please call (972) 624-0239 and we’ll take care of you.';
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (!form.reportValidity()) return;
-    notice.textContent = 'Online quote requests are coming soon. For now, please call (972) 624-0239 and we’ll take care of you.';
-    notice.hidden = false;
+
+    var payload = {};
+    new FormData(form).forEach(function (value, key) { payload[key] = value; });
+
+    button.disabled = true;
+    button.textContent = 'Sending…';
+    notice.hidden = true;
+
+    // Only messages the server chose for the visitor are shown; network and
+    // parse errors (whose text is browser jargon) fall back to the phone number.
+    fetch('/api/quote', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (body) {
+          if (res.ok && body.ok) return null;
+          if (body.code === 'not_configured') return NOT_CONFIGURED;
+          return res.status === 400 && body.error ? body.error : FALLBACK;
+        });
+      }, function () { return FALLBACK; })
+      .then(function (problem) {
+        if (!problem) {
+          form.reset();
+          notice.textContent = 'Thanks, your request is in. We’ll be in touch shortly to talk through your options.';
+        } else {
+          notice.textContent = problem;
+        }
+        notice.hidden = false;
+        button.disabled = false;
+        button.textContent = 'Request My Quote';
+      });
   });
 })();
 </script>
