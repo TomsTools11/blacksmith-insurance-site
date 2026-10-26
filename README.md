@@ -131,6 +131,13 @@ texture.
 Anything under `/assets/` is served `immutable, max-age=31536000`. Changing an image
 means changing its filename, not overwriting it, or cached clients keep the old one.
 
+`styles.css` is served `max-age=0, must-revalidate`: browsers check it on every
+page load (a cheap 304 when unchanged), so a CSS change shows up immediately. It
+used to be cached for an hour, which left browsers that had visited before showing
+the new `/team` page with the old stylesheet. Both pages link it as
+`/styles.css?v=<date>`. Bump that date in `index.html` and `team.html` whenever the CSS
+changes, so browsers that still hold the old one-hour copy fetch the new file.
+
 The owner headshot is now used only in the About section.
 
 ## Editing notes
