@@ -136,9 +136,9 @@ The owner headshot is now used only in the About section.
 ## Editing notes
 
 - Colors, fonts, and spacing are CSS custom properties at the top of `styles.css`.
-- Type scales with `clamp()`; breakpoints are at 1180 / 1080 / 1024 / 900 / 720 / 560px.
-  The nav drops at 1080 rather than the prototype's 900 — with the phone number and
-  the Get-a-Quote button in the same bar, it runs out of room before 900.
+- Type scales with `clamp()`; breakpoints are at 1180 / 1160 / 1024 / 900 / 720 / 560px.
+  The nav drops at 1160 rather than the prototype's 900 — with six links, the phone
+  number and the Get-a-Quote button in the same bar, it runs out of room near 1150.
 - The phone number appears in six places (header, hero card, About, quote, footer,
   and JSON-LD) — grep for `9726240239` before changing it.
 - The production hostname is hard-coded in `index.html` (canonical, `og:url`,
